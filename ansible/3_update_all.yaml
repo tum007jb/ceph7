@@ -1,0 +1,10 @@
+- name: Updata All PKG
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Update All PKG
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+    - name: Reboot
+      ansible.builtin.reboot:

@@ -1,0 +1,29 @@
+- name: Register Ceph Sub
+  hosts: all
+  gather_facts: no
+  vars:
+    - usernamesub: "surayossri007"
+    - passwordsub: "Addminit@ti0n"
+    - RHpoolid: "2c94e7b18c82c5c7018cc7d27f2b3c75"
+  tasks:
+    - name: Register Sub Redhat Ceph FS
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ usernamesub }}"
+        password: "{{ passwordsub }}"
+        pool_ids: "{{ RHpoolid }}"
+    - name: Enable Repo BaseOS RHEL9
+      community.general.rhsm_repository:
+        name: rhel-9-for-x86_64-baseos-rpms
+    - name: Enable Repo BaseApp RHEL9
+      community.general.rhsm_repository:
+        name: rhel-9-for-x86_64-appstream-rpms
+    - name: Enable Repo Ceph7 RHEL9
+      community.general.rhsm_repository:
+        name: rhceph-7-tools-for-rhel-9-x86_64-rpms
+    - name: check Repo
+      ansible.builtin.shell:
+        cmd: "dnf repolist"
+      register: result
+    - debug:
+        var: result

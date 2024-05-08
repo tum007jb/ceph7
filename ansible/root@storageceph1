@@ -1,0 +1,29 @@
+---
+service_type: host
+addr: 192.168.172.52
+hostname: storageceph1
+---
+service_type: host
+addr: 192.168.172.53
+hostname: storageceph2
+---
+service_type: host
+addr: 192.168.172.54
+hostname: storageceph3
+---
+service_type: mon
+placement:
+  hosts:
+    - storageceph1
+    - storageceph2
+    - storageceph3
+service_type: osd
+service_id: default_drive_group
+placement:
+  hosts:
+    - storageceph1
+    - storageceph2
+    - storageceph3
+data_devices:
+  paths:
+    - /dev/sdb

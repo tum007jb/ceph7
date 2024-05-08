@@ -1,0 +1,45 @@
+---
+service_type: host
+addr: 192.168.172.52
+hostname: storageceph1.dso.local
+---
+service_type: host
+addr: 192.168.172.53
+hostname: storageceph2.dso.local
+---
+service_type: host
+addr: 192.168.172.54
+hostname: storageceph3.dso.local
+---
+service_type: mon
+placement:
+  hosts:
+    - storageceph1.dso.local
+    - storageceph2.dso.local
+    - storageceph3.dso.local
+---
+service_type: rgw
+service_id: realm.zone
+placement:
+  hosts:
+    - storageceph2.dso.local
+    - storageceph3.dso.local
+---
+service_type: mgr
+placement:
+  hosts:
+    - storageceph1.dso.local
+    - storageceph2.dso.local
+    - storageceph3.dso.local
+---
+service_type: osd
+service_id: my_osd
+placement:
+  hosts:
+    - storageceph1.dso.local
+    - storageceph2.dso.local
+    - storageceph3.dso.local
+data_devices:
+  paths:
+    - /dev/vdb
+    - /dev/vdc

@@ -1,0 +1,7 @@
+[glasterfs]
+192.168.172.52
+192.168.172.53
+192.168.172.54
+[all:vars]
+ansible_user=root
+ansible_ssh_pass=P@ssw0rd@ifs

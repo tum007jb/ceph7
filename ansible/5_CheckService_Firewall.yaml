@@ -1,0 +1,29 @@
+- name: Check Service and Firewall
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Start Glusterd Service
+      ansible.builtin.service:
+        name: glusterd
+        state: started
+        enabled: yes
+    - name: permit traffic Gluster FS
+      ansible.posix.firewalld:
+        service: glusterfs
+        permanent: true
+        immediate: true
+        state: enabled
+    - name: permit traffic TCP
+      ansible.posix.firewalld:
+        port: "{{ item }}/tcp"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop: [ 111, 139, 445, 2049, 4379, 24007, 55555, 662, 32803, 20048, 875, 2224, 3121, 21064, 49152, 49664, 1023, 49152 ]
+    - name: permit traffic UDP
+      ansible.posix.firewalld:
+        port: "{{ item }}/udp"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop: [ 111, 137, 138, 2049, 662, 32803, 32769, 20048, 875, 5404, 5405,  ]

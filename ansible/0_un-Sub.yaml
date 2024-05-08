@@ -1,0 +1,7 @@
+- name: Un Register Ceph Sub
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Register Sub Redhat Ceph FS
+      community.general.redhat_subscription:
+        state: absent

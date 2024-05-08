@@ -1,0 +1,21 @@
+- name: Install Gluster FS
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Disable SELinux
+      ansible.posix.selinux:
+        state: disabled
+    - name: Install ansible-core
+      ansible.builtin.dnf:
+        name: ansible-core
+        state: latest
+    - name: Install cephadm-ansible
+      ansible.builtin.dnf:
+        name: cephadm-ansible
+        state: latest
+    #- name: Reboot
+    #  ansible.builtin.reboot:
+    #- name: Install Gluster NFS
+    #  ansible.builtin.dnf:
+    #    name: glusterfs-ganesha
+    #    state: latest

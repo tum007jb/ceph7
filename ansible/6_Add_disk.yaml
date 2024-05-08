@@ -1,0 +1,41 @@
+---
+- name: Add Disk LVM on VM
+  hosts: all
+  vars:
+    - devices_path: /dev/sdb
+    - vg_name: "data-vg"
+    - lv_name: "data-lv"
+    - mount_patch: "/bricks/brick1"
+  tasks:
+  - name: Create a new primary partition for LVM
+    parted:
+        device: "{{ devices_path }}"
+        number: 1
+        flags: [ lvm ]
+        state: present
+  - name: Ensure Volume Groups Exist
+    lvg:
+        vg: "{{ vg_name }}"
+        pvs: "{{ devices_path }}1"
+  - name: Create a logical volume the size of all remaining space in the volume group
+    lvol:
+        vg: "{{ vg_name }}"
+        lv: "{{ lv_name }}"
+        size: 100%FREE
+    when: lv_name not in ansible_lvm["lvs"]
+  - name: Ensure XFS Filesystem exists on each LV
+    filesystem:
+        dev: "/dev/{{ vg_name }}/{{ lv_name }}"
+        fstype: xfs
+  - name: Ensure {{ mount_patch }} is created
+    file:
+        path: "{{ mount_patch }}"
+        state: directory
+        mode: '0755'
+  - name: Each Logical Volume is mounted
+    mount:
+        path: "{{ mount_patch }}"
+        src: "/dev/{{ vg_name }}/{{ lv_name }}"
+        fstype: xfs
+        opts: noatime
+        state: mounted
